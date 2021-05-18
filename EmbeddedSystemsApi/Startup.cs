@@ -48,15 +48,22 @@ namespace EmbeddedSystemsApi
         public void ConfigureServices(IServiceCollection services)
         {
             // TODO: Uncomment the line below if you are using an external database.
-            // services.AddDbContext<TemperatureContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             // TODO: Comment this line if you are using the database configuration above.
-            services.AddDbContext<ApplicationContext>(options => options.UseInMemoryDatabase("EmbeddedSystems"));
-            
+            // services.AddDbContext<ApplicationContext>(options => options.UseInMemoryDatabase("EmbeddedSystems"));
+
             // TODO: Register repositories and services.
             services.AddScoped<ITemperatureRepository, TemperatureRepository>();
             services.AddScoped<ITemperatureService, TemperatureService>();
-            
+
+            services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
+            {
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            }));
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -84,6 +91,8 @@ namespace EmbeddedSystemsApi
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseCors();
 
             app.UseEndpoints(endpoints =>
             {

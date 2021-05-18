@@ -1,0 +1,28 @@
+version: '3.4'
+
+services:
+
+  embeddedsystemsapi:
+    image: ${DOCKER_REGISTRY-}embeddedsystemsapi
+    build:
+      context: .
+      dockerfile: EmbeddedSystemsApi/Dockerfile
+    ports:
+      - "8080:80"
+    networks:
+      - service
+    depends_on: 
+      - db
+
+  db:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      SA_PASSWORD: "YourStrong@Passw0rd"
+      ACCEPT_EULA: "Y"
+    networks:
+      - service
+    ports:
+    - "1433:1433"
+
+networks:
+  service:
