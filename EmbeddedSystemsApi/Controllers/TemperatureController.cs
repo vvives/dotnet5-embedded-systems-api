@@ -19,7 +19,7 @@ namespace EmbeddedSystemsApi.Controllers
     /// </summary>
     /// <seealso cref="Microsoft.AspNetCore.Mvc.ControllerBase" />
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/temperatures")]
     public class TemperatureController : ControllerBase
     {
         /// <summary>
@@ -46,6 +46,7 @@ namespace EmbeddedSystemsApi.Controllers
         /// <returns>
         /// The temperature with the specified identifier.
         /// </returns>
+        [Route("{id}")]
         [HttpGet]
         public async Task<ActionResult<Temperature>> Read(int id)
         {
@@ -66,8 +67,9 @@ namespace EmbeddedSystemsApi.Controllers
         /// <returns>
         /// The created temperature.
         /// </returns>
+        [Route("")]
         [HttpPost]
-        public async Task<ActionResult<Temperature>> Create(TemperatureRequest temperatureRequest)
+        public async Task<ActionResult<Temperature>> Create([FromBody] TemperatureRequest temperatureRequest)
         {
             Temperature temperature = new Temperature(temperatureRequest.Value);
 
